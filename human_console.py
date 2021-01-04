@@ -28,11 +28,7 @@ def t_FILE_TYPE(t):
 
 def t_FILE_NAME(t):
     r'\w+'
-    if re.match(r'\w+', t.value):
-        return t
-    else:
-        t.value = 'file'
-        return t
+    return t
 
 
 t_ignore = ' \t'
@@ -49,7 +45,10 @@ def p_command(p):
     elif re.match(r'[SsUu]twórz', p[1]):
         if re.match(r'[Pp]lik', p[2]):
             if re.match(r'[Tt]ekstowy', p[3]):
-                f = open(p[4] + ".txt", 'w')
+                try:
+                    f = open(p[4] + ".txt", 'w')
+                except IndexError:
+                    f = open("file.txt", 'w')
                 f.close()
                 print("Stworzono plik :D !")
         else:
