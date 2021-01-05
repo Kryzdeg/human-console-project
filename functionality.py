@@ -2,10 +2,7 @@ import os
 from speech_synthesize import play_sound
 
 
-def testing():
-    file_name = 'test.mp3'
-    msg = "Test został przeprowadzony poprawnie."
-
+def testing(msg="Test został przeprowadzony poprawnie.", file_name='test.mp3'):
     play_sound(msg, file_name)
 
 
