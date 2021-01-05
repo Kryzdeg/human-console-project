@@ -1,10 +1,7 @@
 from ply.lex import lex
 from ply.yacc import yacc
-from speech_synthesize import synthesize_speech
-from functionality import create_file
-from playsound import playsound
+from functionality import create_txt_file, delete_txt_file, testing
 import re
-import os
 
 tokens = (
     'OPERATE',
@@ -15,7 +12,7 @@ tokens = (
 
 
 def t_OPERATE(t):
-    r'[Ww](łącz|yłącz) | [Oo](dpal|dtwórz|dpaułzuj) | [Zz](atrzymaj|apałzuj) | [SsUu]twórz | [Ss]zukaj | [Tt]est'
+    r'[Ww](łącz|yłącz) | [Oo](dpal|dtwórz|dpaułzuj) | [Zz](atrzymaj|apałzuj) | [SsUu]twórz | [Ss]zukaj | [Tt]est | [Uu]suń'
     return t
 
 
@@ -51,18 +48,25 @@ def p_command(p):
                 try:
                     file_name = f"{p[4]}.txt"
                 except IndexError:
-                    file_name = "file.txt"
+                    file_name = "files/file.txt"
 
-                create_file(file_name)
+                create_txt_file(file_name)
+        else:
+            print("Zła komenda :(")
+
+    elif re.match(r'[Uu]suń', p[1]):
+        if re.match(r'[Pp]lik', p[2]):
+            if re.match(r'[Tt]ekstowy', p[3]):
+                try:
+                    file_name = f"{p[4]}.txt"
+                    delete_txt_file(file_name)
+                except IndexError:
+                    print("Zła komenda :(")
         else:
             print("Zła komenda :(")
 
     elif re.match(r'[Tt]est', p[1]):
-        file_name = 'test.mp3'
-
-        if not os.path.isfile(file_name):
-            synthesize_speech("Test został przeprowadzony poprawnie.", file_name)
-        playsound(file_name)
+        testing()
 
 
 lexer = lex()

@@ -7,7 +7,10 @@ import sys
 HERTZ_RATE = 16000
 
 while True:
-    print("Wybierz:\n1 - aby włączyć nasłuchiwanie,\n2 - żeby zakończyć działanie programu.")
+    print("Wybierz:\n1 - aby włączyć nasłuchiwanie,"
+          "\n2 - żeby wpisać ręcznie komendę,"
+          "\n3 - żeby zakończyć działanie programu.")
+
     switch = input()
 
     if switch == "1":
@@ -17,6 +20,10 @@ while True:
         parser.parse(msg)
 
     elif switch == "2":
+        msg = input("Wpisz komendę:")
+        parser.parse(msg)
+
+    elif switch == "3":
         sys.exit()
 
     else:

@@ -1,4 +1,6 @@
 from google.cloud import texttospeech
+from playsound import playsound
+import os
 
 
 def synthesize_speech(text_to_synthesize, file_name):
@@ -18,5 +20,12 @@ def synthesize_speech(text_to_synthesize, file_name):
         input=synthesis_input, voice=voice, audio_config=audio_config
     )
 
-    with open(file_name, "wb") as out:
+    with open(f"sounds/{file_name}", "wb") as out:
         out.write(response.audio_content)
+
+
+def play_sound(msg, file_name):
+    if not os.path.isfile(f"sounds/{file_name}"):
+        synthesize_speech(msg, file_name)
+    print(msg)
+    playsound(f"sounds/{file_name}")
