@@ -7,7 +7,7 @@ def sound_recorder(hertz_rate):
     channels = 1
     hertz_rate = hertz_rate
     chunk = 1024
-    time_recording = 8
+    time_recording = 5
     wave_filename = "file.wav"
 
     audio = pyaudio.PyAudio()
@@ -35,3 +35,5 @@ def sound_recorder(hertz_rate):
     waveFile.setframerate(hertz_rate)
     waveFile.writeframes(b''.join(frames))
     waveFile.close()
+
+
