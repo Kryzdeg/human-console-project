@@ -93,9 +93,7 @@ def p_command_file(p):
                     file_name = f"{p[4]}.txt"
                     delete_txt_file(file_name)
                 except IndexError:
-                    print("Zła komenda :(")
-        else:
-            print("Zła komenda :(")
+                    print("Musisz podać jaki plik chcesz usunąć.")
 
 
 def p_command_web(p):
