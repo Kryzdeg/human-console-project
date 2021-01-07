@@ -17,10 +17,11 @@ while True:
         sound_recorder(hertz_rate=HERTZ_RATE)
         msg = speech_recognition(hertz_rate=HERTZ_RATE)
         print("Twoja komenda: " + msg)
-        parser.parse(msg)
+        # parser.parse(msg)
 
     elif switch == "2":
         msg = input("Wpisz komendę:")
+        print(msg)
         parser.parse(msg)
 
     elif switch == "3":
