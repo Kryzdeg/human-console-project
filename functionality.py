@@ -5,12 +5,16 @@ from translate import Translator
 import webbrowser
 
 
+def print_command(command):
+    print("Twoja komenda: " + command)
+
+
 def testing(msg="Test został przeprowadzony poprawnie.", file_name='test.mp3'):
-    # play_sound(msg, file_name)
-    translator = Translator(to_lang='en', from_lang='pl')
-    translation = translator.translate("jeden milion dziewięćset dziewięćdziesiąt dziewięć")
-    print(translation)
-    print(w2n.word_to_num(translation))
+    play_sound(msg, file_name)
+    # translator = Translator(to_lang='en', from_lang='pl')
+    # translation = translator.translate("jeden milion dziewięćset dziewięćdziesiąt dziewięć")
+    # print(translation)
+    # print(w2n.word_to_num(translation))
 
 
 def create_txt_file(file_name):
@@ -52,3 +56,4 @@ def open_webpage_window(browser, page="google.pl"):
 
 def open_webpage_tab(browser, page="google.pl"):
     browser.open_new_tab(page)
+

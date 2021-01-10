@@ -27,5 +27,4 @@ def synthesize_speech(text_to_synthesize, file_name):
 def play_sound(msg, file_name):
     if not os.path.isfile(f"sounds/{file_name}"):
         synthesize_speech(msg, file_name)
-    print(msg)
     playsound(f"sounds/{file_name}")

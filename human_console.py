@@ -1,13 +1,24 @@
 from ply.lex import lex
 from ply.yacc import yacc
-from functionality import create_txt_file, delete_txt_file, testing, open_webpage_window, open_webpage_tab, get_webbrowser
+from functionality import (
+    create_txt_file,
+    delete_txt_file,
+    testing,
+    open_webpage_window,
+    open_webpage_tab,
+    get_webbrowser,
+    print_command
+)
+
 import re
 
 tokens = (
     'TEST',
+    'TEST_ARG',
     'OPERATE',
     'WEBBROWSER',
     'BROWSER_ARG',
+    'PAGE',
     'FILE',
     'FILE_TYPE',
     'FILE_NAME'
@@ -16,6 +27,13 @@ tokens = (
 
 def t_TEST(t):
     r'[Tt]est'
+    return t
+
+
+def t_TEST_ARG(t):
+    r'(.)+'
+
+    t.value = re.sub(r' kropka ', '.', t.value)
     return t
 
 
@@ -41,6 +59,11 @@ def t_WEBBROWSER(t):
 
 def t_BROWSER_ARG(t):
     r'[Tt]aby? | [Zz]akładk[ai] | [Oo]kn[oa]'
+    return t
+
+
+def t_PAGE(t):
+    r'\w+'
     return t
 
 
@@ -95,10 +118,13 @@ def p_command_file(p):
                 except IndexError:
                     print("Musisz podać jaki plik chcesz usunąć.")
 
+    print_command(p.value)
+
 
 def p_command_web(p):
     '''command : OPERATE WEBBROWSER
-               | OPERATE WEBBROWSER BROWSER_ARG'''
+               | OPERATE WEBBROWSER BROWSER_ARG
+               | OPERATE WEBBROWSER BROWSER_ARG PAGE'''
 
     if re.match(r'[Ww]łącz|[Oo](dpal|twórz)', p[1]):
         try:
@@ -113,14 +139,20 @@ def p_command_web(p):
 
 
 def p_command_test(p):
-    '''command : TEST'''
+    '''command : TEST
+               | TEST TEST_ARG'''
 
     if re.match(r'[Tt]est', p[1]):
-        testing()
+        try:
+            testing(p[2])
+        except IndexError:
+            testing()
+
+    print_command(p.value)
 
 
 def p_error(p):
-    print("Niepoprawna komenda.")
+    print(f"Niepoprawna komenda.")
 
 
 lexer = lex()
