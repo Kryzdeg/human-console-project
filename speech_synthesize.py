@@ -24,7 +24,4 @@ def synthesize_speech(text_to_synthesize, file_name):
         out.write(response.audio_content)
 
 
-def play_sound(msg, file_name):
-    if not os.path.isfile(f"sounds/{file_name}"):
-        synthesize_speech(msg, file_name)
-    playsound(f"sounds/{file_name}")
+
