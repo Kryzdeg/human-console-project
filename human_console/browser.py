@@ -73,9 +73,9 @@ def p_command(p):
         except IndexError:
             open_webpage_window(get_webbrowser(p[2]))
 
-#
-# def p_error(p):
-#     print(f"Niepoprawna komenda.")
+
+def p_error(p):
+    print(f"Niepoprawna komenda.")
 
 
 browser_parser = yacc()

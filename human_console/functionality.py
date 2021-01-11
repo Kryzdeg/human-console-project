@@ -81,3 +81,30 @@ def open_webpage_window(browser, page="google.pl"):
 
 def open_webpage_tab(browser, page="google.pl"):
     browser.open_new_tab(page)
+
+
+def operate_sum(num1, num2):
+    result = num1 + num2
+
+    msg = f"Wynik działania {num1} + {num2} = {result}."
+    file_name = f"sum_{num1}_{num2}.mp3"
+    print(msg)
+    play_sound(msg, file_name)
+
+
+def operate_minus(num1, num2):
+    result = num1 - num2
+
+    msg = f"Wynik działania {num1} odjąć {num2} = {result}."
+    file_name = f"minus_{num1}_{num2}.mp3"
+    print(msg.replace("odjąć", "-"))
+    play_sound(msg, file_name)
+
+
+def operate_times(num1, num2):
+    result = num1 * num2
+
+    msg = f"Wynik działania {num1} razy {num2} = {result}."
+    file_name = f"times_{num1}_{num2}.mp3"
+    print(msg.replace("razy", "*"))
+    play_sound(msg, file_name)

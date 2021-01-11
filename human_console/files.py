@@ -3,10 +3,6 @@ from ply.yacc import yacc
 from .functionality import (
     create_txt_file,
     delete_txt_file,
-    testing,
-    open_webpage_window,
-    open_webpage_tab,
-    get_webbrowser
 )
 
 import re
