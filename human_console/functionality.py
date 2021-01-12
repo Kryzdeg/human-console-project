@@ -5,6 +5,8 @@ import webbrowser
 import speech_recognition as sr
 from gtts import gTTS
 import playsound
+from numpy import power, round
+import subprocess
 
 
 def recording_command():
@@ -71,6 +73,9 @@ def delete_txt_file(file_name):
     play_sound(msg, audio_file_name)
 
 
+def run_program(program_name):
+    subprocess.call(["tutaj_ścieżka"])
+
 def get_webbrowser(browser=None):
     return webbrowser.get(browser)
 
@@ -107,4 +112,57 @@ def operate_times(num1, num2):
     msg = f"Wynik działania {num1} razy {num2} = {result}."
     file_name = f"times_{num1}_{num2}.mp3"
     print(msg.replace("razy", "*"))
+    play_sound(msg, file_name)
+
+
+def operate_divide(num1, num2):
+    if num2 == 0:
+        msg = "Kto dzielić przez zero próbuje\n" +\
+              "dostaje jedynki, nie dwóje,\n" +\
+              "bo wiedzą wszyscy i wszędzie,\n" +\
+              "że z tego nic nie będzie!"
+
+        file_name = f"dont_divide_by_0.mp3"
+        print(msg.replace("podzielone przez", "/"))
+        play_sound(msg, file_name)
+        return
+
+    result = round(num1 / num2, 4)
+    if result % int(result) == 0:
+        result = int(result)
+
+    msg = f"Wynik działania {num1} podzielone przez {num2} = {result}."
+    file_name = f"divide_{num1}_{num2}.mp3"
+    print(msg.replace("podzielone przez", "/"))
+    play_sound(msg, file_name)
+
+
+def operate_power(num1, num2):
+    result = power(num1, num2)
+
+    msg = f"Wynik działania {num1} do potęgi {num2} = {result}."
+    file_name = f"power_{num1}_{num2}.mp3"
+    print(msg.replace(" do potęgi ", "^"))
+    play_sound(msg, file_name)
+
+
+def operate_nth_root(root, num):
+    if root == 0:
+        msg = "Kto dzielić przez zero próbuje\n" +\
+              "dostaje jedynki, nie dwóje,\n" +\
+              "bo wiedzą wszyscy i wszędzie,\n" +\
+              "że z tego nic nie będzie!"
+
+        file_name = f"dont_divide_by_0.mp3"
+        print(msg.replace("podzielone przez", "/"))
+        play_sound(msg, file_name)
+        return
+
+    result = round(power(num, (1./root)), 4)
+    if result % int(result) == 0:
+        result = int(result)
+
+    msg = f"Wynik działania pierwiastek {root} stopnia z {num} = {result}."
+    file_name = f"root_{root}_{num}.mp3"
+    print(msg)
     play_sound(msg, file_name)

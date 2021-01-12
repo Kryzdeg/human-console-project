@@ -36,11 +36,11 @@ def BrowserLexer():
         return t
 
     def t_BROWSER_ARG(t):
-        r'[Tt]aby? | [Zz]akładk[ai] | [Oo]kn[oa]'
+        r'[wW]\s[Nn]ow(ym\s[Tt]abie|ej\s[Zz]akładce) | [Tt]ab | [Zz]akładka | [Oo]kn[o]'
         return t
 
     def t_PAGE(t):
-        r'(\w+\.\s?)*\w+\.(com|pl|org)'
+        r"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
 
         t.value = re.sub(r"\s.|.\s|\skropka\s", ".", t.value)
         return t
@@ -61,7 +61,7 @@ def p_command(p):
 
     if re.match(r'[Ww]łącz|[Oo](dpal|twórz)', p[1]):
         try:
-            if re.match(r'[Tt]aby?|[Zz]akładk[ai]', p[3]):
+            if re.match(r'[wW]\s[Nn]ow(ym\s[Tt]abie|ej\s[Zz]akładce)|[Tt]ab|[Zz]akładka', p[3]):
                 try:
                     print(p[4])
                     open_webpage_tab(get_webbrowser(p[2]), p[4])

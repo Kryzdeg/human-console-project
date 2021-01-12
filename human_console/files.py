@@ -9,7 +9,6 @@ import re
 
 tokens = (
     'OPERATE',
-    'FILE',
     'FILE_TYPE',
     'FILE_NAME',
 )
@@ -17,15 +16,11 @@ tokens = (
 
 def FilesLexer():
     def t_OPERATE(t):
-        r'[Ww](łącz|yłącz) | [Oo](dpal|dtwórz|dpaułzuj) | [Zz](atrzymaj|apałzuj) | [SsUu]twórz | [Ss](zukaj|kasuj) | [Uu]suń'
-        return t
-
-    def t_FILE( t):
-        r'[Pp]lik'
+        r'[SsUu]twórz | [Ss]kasuj | [Uu]suń | [Ee]dytuj | [Dd]opisz\sdo'
         return t
 
     def t_FILE_TYPE(t):
-        r'[Tt]ekstowy | [Dd]źwiękowy'
+        r'[Pp]lik\s([Tt]ekstowy|[Dd]źwiękowy)'
         return t
 
     def t_FILE_NAME(t):
@@ -42,21 +37,17 @@ def FilesLexer():
 
 
 def p_command(p):
-    '''command : OPERATE FILE FILE_TYPE FILE_NAME
-               | OPERATE FILE FILE_TYPE'''
+    '''command : OPERATE FILE_TYPE FILE_NAME
+               | OPERATE FILE_TYPE'''
 
-    if re.match(r'[Ww]łącz|[Oo](dpal|twórz)', p[1]):
-        print(p[1], p[2])
+    if re.match(r'[SsUu]twórz', p[1]):
+        if re.match(r'[Pp]lik\s([Tt]ekstowy)', p[2]):
+            try:
+                file_name = f"{p[3].replace(' ', '_')}.txt"
+            except IndexError:
+                file_name = "file.txt"
 
-    elif re.match(r'[SsUu]twórz', p[1]):
-        if re.match(r'[Pp]lik', p[2]):
-            if re.match(r'[Tt]ekstowy', p[3]):
-                try:
-                    file_name = f"{p[4].replace(' ', '_')}.txt"
-                except IndexError:
-                    file_name = "file.txt"
-
-                create_txt_file(file_name)
+            create_txt_file(file_name)
         else:
             print("Zła komenda :(")
 
