@@ -1,12 +1,17 @@
 import os
-from word2number import w2n
-from translate import Translator
 import webbrowser
 import speech_recognition as sr
 from gtts import gTTS
 import playsound
 from numpy import power, round
 import subprocess
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env()
 
 
 def recording_command():
@@ -75,6 +80,7 @@ def delete_txt_file(file_name):
 
 def run_program(program_name):
     subprocess.call(["tutaj_ścieżka"])
+
 
 def get_webbrowser(browser=None):
     return webbrowser.get(browser)
@@ -166,3 +172,32 @@ def operate_nth_root(root, num):
     file_name = f"root_{root}_{num}.mp3"
     print(msg)
     play_sound(msg, file_name)
+
+
+class SpotifyControler(object):
+    def __init__(self):
+        self.sp = None
+        self.device_id = None
+
+    def authorize(self):
+        scope = "user-modify-playback-state playlist-modify-public playlist-modify-private user-follow-modify user-read-currently-playing user-read-playback-state"
+
+        auth_manager = SpotifyOAuth(client_id=env("SPOTIFY_API_CLIENT_ID"), client_secret=env("SPOTIFY_API_CLIENT_SECRET"),
+                                    redirect_uri=env("SPOTIFY_API_REDIRECT_URI"), scope=scope)
+        self.sp = spotipy.Spotify(auth_manager=auth_manager)
+
+    def get_device_id(self):
+        print(self.sp.devices())
+
+    def get_me(self):
+        print(self.sp.me())
+
+    def spotify_unpause(self):
+        pass
+
+    def spotify_pause(self):
+        pass
+
+    def spotify_play_song(self, artist, song):
+        pass
+

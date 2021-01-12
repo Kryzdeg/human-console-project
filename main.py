@@ -3,6 +3,7 @@ from human_console.functionality import play_sound, recording_command, synthesiz
 from human_console.files import file_parser, FilesLexer
 from human_console.browser import browser_parser, BrowserLexer
 from human_console.calc import calc_parser, CalcLexer
+from human_console.spotify import spotify_parser, SpotifyLexer
 import sys
 
 
@@ -18,6 +19,10 @@ def run_command(msg):
     elif lexer_type == "KALKULATOR":
         calc_lexer = CalcLexer()
         calc_parser.parse(msg, lexer=calc_lexer)
+    elif lexer_type == "SPOTIFY":
+        print(msg)
+        spotify_lexer = SpotifyLexer()
+        spotify_parser.parse(msg, lexer=spotify_lexer)
     else:
         print("Podaj proszę typ poleceń.")
 
