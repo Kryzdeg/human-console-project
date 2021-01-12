@@ -5,6 +5,7 @@ cfgv==3.2.0
 chardet==4.0.0
 click==7.1.2
 distlib==0.3.1
+environ==1.0
 filelock==3.0.12
 google-api-core==1.24.1
 google-api-python-client==1.12.8
@@ -25,6 +26,7 @@ lxml==4.6.2
 mypy-extensions==0.4.3
 nltk==3.5
 nodeenv==1.5.0
+numpy==1.19.5
 packaging==20.8
 playsound==1.2.2
 pluggy==0.13.1
@@ -46,6 +48,8 @@ ruamel.yaml==0.16.12
 ruamel.yaml.clib==0.2.2
 six==1.15.0
 SpeechRecognition==3.8.1
+spotify-local-control==0.2.3
+spotipy==2.16.1
 toml==0.10.2
 tox==3.21.0
 tqdm==4.56.0
