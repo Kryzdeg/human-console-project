@@ -41,14 +41,6 @@ def play_sound(msg, file_name):
     playsound.playsound(f"human_console/sounds/{file_name}")
 
 
-def testing(msg="Test został przeprowadzony poprawnie.", file_name='test.mp3'):
-    play_sound(msg, file_name)
-    # translator = Translator(to_lang='en', from_lang='pl')
-    # translation = translator.translate("jeden milion dziewięćset dziewięćdziesiąt dziewięć")
-    # print(translation)
-    # print(w2n.word_to_num(translation))
-
-
 def create_txt_file(file_name):
     if not os.path.isdir("files"):
         os.mkdir("files")
@@ -261,6 +253,9 @@ class SpotifyController:
 
     def spotify_next_track(self):
         self.sp.next_track()
+
+    def spotify_previous_track(self):
+        self.sp.previous_track()
 
     def spotify_change_to_smartphone(self):
         self._get_smartphone_device_id()

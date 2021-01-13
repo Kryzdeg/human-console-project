@@ -12,14 +12,16 @@ tokens = (
 def SpotifyLexer():
     def t_OPERATE(t):
         r'''([Oo]d|([Zz]a)?)pauzuj
+            | [Zz]atrzymaj
             | [Pp]auza
             | [Ww]znów
             | [Ww]łącz(\s(moją\s)?([Uu]twór|[Pp]iosenk[eę]|pl(ay|ej)list[ęe]))?
-            | [Oo]d(twórz|pal)(\s(moją\s)?([Uu]twór|[Pp]iosenk[eę]|pl(ay|ej)list[ęe]))?
+            | [Oo]d(twórz(aj)?|pal)(\s(moją\s)?([Uu]twór|[Pp]iosenk[eę]|pl(ay|ej)list[ęe]))?
             | [Zz]?reset(uj)?
             | [Pp]uść\sod\s(nowa|początku)
             | ([Pp]rzełącz|[Zz]a?mień)\sna\s(telefon|smart(ph|f)ona?|komputer)
-            | [Nn]e(ks|x)t | [Nn]astępny\s(utwór)?'''
+            | [Nn]e(ks|x)t | [Nn]astępny\s(utwór)?
+            | ([Cc]ofnij\sdo\s)?([Pp]oprzedni(ego)?)(\sutwóru?)?'''
         return t
 
     def t_TRACK_PLAYLIST(t):
@@ -55,10 +57,7 @@ def p_command(p):
     spotify_controller = SpotifyController()
     spotify_controller.setup()
 
-    if re.match(r"[Oo]dpauzuj|[Ww]znów", p[1]):
-        spotify_controller.spotify_unpause()
-
-    elif re.match(r"([Zz]a)?pauzuj|[Pp]auza", p[1]):
+    if re.match(r"([Zz]a)?pauzuj|[Pp]auza|[Zz]atrzymaj]", p[1]):
         spotify_controller.spotify_pause()
 
     elif re.match(r"([Ww]łącz|[Oo](dtwórz|dpal))\s([Uu]twór|[Pp]iosenk[eę])", p[1]):
@@ -78,6 +77,9 @@ def p_command(p):
     elif re.match(r"[Nn]e(ks|x)t|[Nn]astępny\s(utwór)?", p[1]):
         spotify_controller.spotify_next_track()
 
+    elif re.match(r"([Cc]ofnij\sdo\s)?([Pp]oprzedni(ego)?)(\sutw(oru|ór))?", p[1]):
+        spotify_controller.spotify_previous_track()
+
     elif re.match(r"([Ww]łącz|[Oo]d(twórz|pal))\s(pl(ay|ej)list[ęe])", p[1]):
         try:
             if re.match(r"(\w+\s?)+", p[2]):
@@ -96,9 +98,12 @@ def p_command(p):
         except Exception as e:
             print("Niepoprawna komenda.")
 
+    elif re.match(r"[Oo]dpauzuj|[Ww]znów|[Ww]łącz|[Oo]d(twórz(aj)?|pal)", p[1]):
+        spotify_controller.spotify_unpause()
 
-def p_error(p):
-    print(f"Niepoprawna komenda.")
+
+# def p_error(p):
+#     print(f"Niepoprawna komenda.")
 
 
 spotify_parser = yacc()
