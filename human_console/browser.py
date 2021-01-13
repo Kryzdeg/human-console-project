@@ -4,7 +4,7 @@ from .functionality import (
     open_webpage_window,
     open_webpage_tab,
     get_webbrowser,
-    close_webbrowser
+    # close_webbrowser
 )
 
 import re

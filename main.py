@@ -1,4 +1,3 @@
-from my_speech_recognition import speech_recognition
 from human_console.functionality import play_sound, recording_command, synthesize_text
 from human_console.files import file_parser, FilesLexer
 from human_console.browser import browser_parser, BrowserLexer

@@ -1,7 +1,14 @@
 from ply.lex import lex
 from ply.yacc import yacc
 import re
-from .functionality import operate_sum, operate_minus, operate_times, operate_divide, operate_power, operate_nth_root
+from .functionality import (
+    operate_sum,
+    operate_minus,
+    operate_times,
+    operate_divide,
+    operate_power,
+    operate_nth_root
+)
 
 tokens = (
     "OPERATE_PLUS",
