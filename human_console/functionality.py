@@ -175,7 +175,6 @@ class SpotifyController:
     def __init__(self):
         self.sp = None
         self.current_device_id = None
-        self.current_device = None
 
     def setup(self):
         scope = "user-read-playback-state user-modify-playback-state user-read-currently-playing"
@@ -188,16 +187,19 @@ class SpotifyController:
         self.sp = spotipy.Spotify(auth_manager=auth_manager)
         self._get_computer_device_id()
 
+    def _get_current_device(self):
+        for device in self.sp.devices()['devices']:
+            if device['id'] == self.current_device_id:
+                return device
+
     def _get_computer_device_id(self):
         for device in self.sp.devices()['devices']:
             if device['name'] == platform.node():
                 self.current_device_id = device['id']
-                self.current_device = device
                 return
 
         if not self.current_device_id:
             self.current_device_id = None
-            self.current_device = None
 
     def _get_smartphone_device_id(self):
         for device in self.sp.devices()['devices']:
@@ -226,16 +228,39 @@ class SpotifyController:
 
         return None
 
+    def _get_playlist_uri(self, playlist, is_mine=False):
+        q_playlist = self.sp.search(q=playlist, type="playlist")
+        if not is_mine:
+            return q_playlist['playlists']['items'][0]['uri']
+        else:
+            for pl in q_playlist['playlists']['items']:
+                if pl['owner']['id'] == self._get_me()['id']:
+                    return pl['uri']
+            return None
+
     def spotify_unpause(self):
-        if self.current_device_id:
-            self.sp.start_playback()
+        try:
+            if self.current_device_id:
+                self.sp.start_playback()
+        except Exception as e:
+            msg = "Twój utwór już jest odtwarzany, lub nie wybrałeś utworu do odtworzenia."
+            print(msg)
+            play_sound(msg, "track_cant_be_played.mp3")
 
     def spotify_pause(self):
-        if self.current_device_id:
-            self.sp.pause_playback()
+        try:
+            if self.current_device_id:
+                self.sp.pause_playback()
+        except Exception as e:
+            msg = "Twój utwór już jest zatrzymany, lub nie ma co zatrzymywać."
+            print(msg)
+            play_sound(msg, "track_cant_be_paused_.mp3")
 
     def spotify_reset_track(self):
         self.sp.seek_track(position_ms=0)
+
+    def spotify_next_track(self):
+        self.sp.next_track()
 
     def spotify_change_to_smartphone(self):
         self._get_smartphone_device_id()
@@ -244,6 +269,16 @@ class SpotifyController:
     def spotify_change_to_computer(self):
         self._get_computer_device_id()
         self.sp.transfer_playback(device_id=self.current_device_id)
+
+    def spotify_play_playlist(self, playlist, is_mine=False):
+        playlist_uri = self._get_playlist_uri(playlist, is_mine)
+
+        if playlist_uri:
+            self.sp.start_playback(context_uri=playlist_uri)
+        else:
+            msg = f"Nie znaleziono playlisty."
+            print(msg)
+            play_sound(msg, "playlist_dont_exist.mp3")
 
     def spotify_play_track(self, artist, track):
         artist_id = self._get_artist_id(artist)
