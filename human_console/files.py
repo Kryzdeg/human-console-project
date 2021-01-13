@@ -52,13 +52,12 @@ def p_command(p):
             print("Zła komenda :(")
 
     elif re.match(r'[Uu]suń|[Ss]kasuj', p[1]):
-        if re.match(r'[Pp]lik', p[2]):
-            if re.match(r'[Tt]ekstowy', p[3]):
-                try:
-                    file_name = f"{p[4]}.txt"
-                    delete_txt_file(file_name)
-                except IndexError:
-                    print("Musisz podać jaki plik chcesz usunąć.")
+        if re.match(r'[Pp]lik\s([Tt]ekstowy)', p[2]):
+            try:
+                file_name = f"{p[3]}.txt"
+                delete_txt_file(file_name)
+            except IndexError:
+                print("Musisz podać jaki plik chcesz usunąć.")
 
 
 def p_error(p):

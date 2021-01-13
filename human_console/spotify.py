@@ -16,7 +16,7 @@ def SpotifyLexer():
             | [Pp]auza
             | [Ww]znów
             | [Ww]łącz(\s(moją\s)?([Uu]twór|[Pp]iosenk[eę]|pl(ay|ej)list[ęe]))?
-            | ([Ww]łącz|[Oo]twórz)\sspotif(y|aja)
+            | (([Ww]łącz|[Oo]twórz)|([Ww]yłącz|[Zz]amknij))\sspotif(y|aja)
             | [Oo]d(twórz(aj)?|pal)(\s(moją\s)?([Uu]twór|[Pp]iosenk[eę]|pl(ay|ej)list[ęe]))?
             | [Zz]?reset(uj)?
             | [Pp]uść\sod\s(nowa|początku)
@@ -63,6 +63,9 @@ def p_command(p):
 
     elif re.match(r"([Ww]łącz|[Oo]twórz)\sspotif(y|aja)", p[1]):
         spotify_controller.run_spotify()
+
+    elif re.match(r"([Ww]yłącz|[Zz]amknij)\sspotif(y|aja)", p[1]):
+        spotify_controller.kill_spotify()
 
     elif re.match(r"([Ww]łącz|[Oo](dtwórz|dpal))\s([Uu]twór|[Pp]iosenk[eę])", p[1]):
         try:

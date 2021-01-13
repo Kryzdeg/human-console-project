@@ -2,8 +2,10 @@ from gtts import gTTS
 from numpy import power, round
 from spotipy.oauth2 import SpotifyOAuth
 
+import re
 import os
 import subprocess
+import psutil
 import platform
 import webbrowser
 import playsound
@@ -60,8 +62,8 @@ def create_txt_file(file_name):
 
 
 def delete_txt_file(file_name):
-    if os.path.isfile(f"../files/{file_name}"):
-        os.remove(f"../files/{file_name}")
+    if os.path.isfile(f"files/{file_name}"):
+        os.remove(f"files/{file_name}")
         msg = f"Usunięto plik tekstowy."
         audio_file_name = f"file_txt_deleted.mp3"
 
@@ -82,6 +84,18 @@ def open_webpage_window(browser, page="google.pl"):
 
 def open_webpage_tab(browser, page="google.pl"):
     browser.open_new_tab(page)
+
+
+# def close_webbrowser(browser):
+#
+#     if browser == "goole-chrome":
+#         b = "chrome"
+#     elif browser == "firefox":
+#         b = "firefox"
+#
+#     for proc in psutil.process_iter():
+#         if re.match(fr"{b}", proc.name()):
+#             proc.kill()
 
 
 def operate_sum(num1, num2):
@@ -233,6 +247,11 @@ class SpotifyController:
 
     def run_spotify(self):
         subprocess.Popen(["spotify"])
+
+    def kill_spotify(self):
+        for proc in psutil.process_iter():
+            if proc.name() == "spotify":
+                proc.kill()
 
     def spotify_unpause(self):
         try:

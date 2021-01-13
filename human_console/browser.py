@@ -3,7 +3,8 @@ from ply.yacc import yacc
 from .functionality import (
     open_webpage_window,
     open_webpage_tab,
-    get_webbrowser
+    get_webbrowser,
+    close_webbrowser
 )
 
 import re
@@ -18,7 +19,7 @@ tokens = (
 def BrowserLexer():
 
     def t_OPERATE(t):
-        r'[Ww](łącz|yłącz) | [Oo](dpal|twórz) | [Zz](atrzymaj|apałzuj)'
+        r'[Ww](łącz|yłącz) | [Oo](dpal|twórz) | [Zz]amknij'
         return t
 
     def t_WEBBROWSER(t):
@@ -36,11 +37,11 @@ def BrowserLexer():
         return t
 
     def t_BROWSER_ARG(t):
-        r'[wW]\s[Nn]ow(ym\s[Tt]abie|ej\s[Zz]akładce) | [Tt]ab | [Zz]akładka | [Oo]kn[o]'
+        r'[wW]\s[Nn]ow(ym\s([Tt1]abie|[Oo]knie)|ej\s[Zz]akładce) | [Tt]ab | [Zz]akładka | [Oo]kn[o]'
         return t
 
     def t_PAGE(t):
-        r"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
+        r"(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+"
 
         t.value = re.sub(r"\s.|.\s|\skropka\s", ".", t.value)
         return t
@@ -68,10 +69,15 @@ def p_command(p):
                 except IndexError:
                     open_webpage_tab(get_webbrowser(p[2]))
 
-            elif re.match(r'[Oo]kn[oa]', p[3]):
+            elif re.match(r'([wW]\s[Nn]owym\s)?[Oo]kn(ie|o)', p[3]):
                 open_webpage_window(get_webbrowser(p[2]))
         except IndexError:
             open_webpage_window(get_webbrowser(p[2]))
+    # elif re.match(r'[Ww]yłącz|[Zz]amknij', p[1]):
+    #     try:
+    #         close_webbrowser(p[2])
+    #     except IndexError:
+    #         print("Niepoprawna komenda.")
 
 
 def p_error(p):
