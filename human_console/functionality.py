@@ -65,11 +65,29 @@ def delete_txt_file(file_name):
     if os.path.isfile(f"files/{file_name}"):
         os.remove(f"files/{file_name}")
         msg = f"Usunięto plik tekstowy."
+        print(msg)
         audio_file_name = f"file_txt_deleted.mp3"
 
     else:
         msg = f"Plik, który chcesz usunąć, nie istnieje."
+        print(msg)
         audio_file_name = f"file_not_exist.mp3"
+
+    play_sound(msg, audio_file_name)
+
+
+def update_txt_file(file_name, text):
+    if os.path.isfile(f"files/{file_name}"):
+        with open(f"files/{file_name}", "a+") as file:
+            file.write(text)
+
+        msg = f"Dopisano do pliku {file_name} podany tekst."
+        print(msg)
+        audio_file_name = f"updated_txt_{file_name.split('.')[0]}.mp3"
+    else:
+        msg = f"Plik, który chcesz edytować, nie istnieje."
+        print(msg)
+        audio_file_name = f"file_not_exist_edit.mp3"
 
     play_sound(msg, audio_file_name)
 

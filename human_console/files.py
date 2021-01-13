@@ -4,7 +4,8 @@ from .functionality import (
     create_txt_file,
     delete_txt_file,
     create_directory,
-    delete_directory
+    delete_directory,
+    update_txt_file
 )
 
 import re
@@ -13,6 +14,7 @@ tokens = (
     'OPERATE',
     'FILE_TYPE',
     'FILE_NAME',
+    "TEXT"
 )
 
 
@@ -22,11 +24,19 @@ def FilesLexer():
         return t
 
     def t_FILE_TYPE(t):
-        r'[Pp]lik\s([Tt]ekstowy|[Dd]źwiękowy)| [Ff]older'
+        r'[Pp]liku?\s([Tt]ekstow(y|ego)|[Dd]źwiękowy)| [Ff]older'
         return t
 
     def t_FILE_NAME(t):
-        r'(\w+(\s)?)+'
+        r'(\w+(\s)?)+,?'
+
+        if re.match(r"(\w+(\s)?)+,", t.value):
+            t.value = re.sub(r",", "", t.value)
+
+        return t
+
+    def t_TEXT(t):
+        r'(\w+\s?)+'
         return t
 
     t_ignore = ' \t'
@@ -78,9 +88,16 @@ def p_command(p):
         else:
             print("Zła komenda :(")
 
+    elif re.match(r'[Ee]dytuj|[Dd]opisz\sdo', p[1]):
+        if re.match(r"[Pp]liku?\s[Tt]ekstow(y|ego)", p[2]):
+            try:
+                update_txt_file(p[3], p[4])
+            except IndexError:
+                print("Niepoprawna komenda.")
 
-def p_error(p):
-    print(f"Niepoprawna komenda.")
+
+# def p_error(p):
+#     print(f"Niepoprawna komenda.")
 
 
 file_parser = yacc()

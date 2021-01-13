@@ -109,4 +109,8 @@ def p_command(p):
         operate_nth_root(int(num), int(p[2]))
 
 
+def p_error(p):
+    print(f"Niepoprawna komenda.")
+
+
 calc_parser = yacc()

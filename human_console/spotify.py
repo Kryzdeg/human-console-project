@@ -109,8 +109,8 @@ def p_command(p):
         spotify_controller.spotify_unpause()
 
 
-# def p_error(p):
-#     print(f"Niepoprawna komenda.")
+def p_error(p):
+    print(f"Niepoprawna komenda.")
 
 
 spotify_parser = yacc()
