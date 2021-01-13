@@ -164,7 +164,7 @@ def operate_divide(num1, num2):
               "że z tego nic nie będzie!"
 
         file_name = f"dont_divide_by_0.mp3"
-        print(msg.replace("podzielone przez", "/"))
+        print(msg)
         play_sound(msg, file_name)
         return
 
@@ -195,11 +195,11 @@ def operate_nth_root(root, num):
               "że z tego nic nie będzie!"
 
         file_name = f"dont_divide_by_0.mp3"
-        print(msg.replace("podzielone przez", "/"))
+        print(msg)
         play_sound(msg, file_name)
         return
 
-    result = round(power(num, (1./root)), 4)
+    result = round(power(num, (1.0/root)), 4)
     if result % int(result) == 0:
         result = int(result)
 
