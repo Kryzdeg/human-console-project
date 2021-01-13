@@ -11,11 +11,12 @@ tokens = (
 
 def SpotifyLexer():
     def t_OPERATE(t):
-        r'''([Oo]d|([Zz]a)?)pauzuj
+        r'''([Oo]d\s|([Zz]a)?)pauzuj
             | [Zz]atrzymaj
             | [Pp]auza
             | [Ww]znów
             | [Ww]łącz(\s(moją\s)?([Uu]twór|[Pp]iosenk[eę]|pl(ay|ej)list[ęe]))?
+            | ([Ww]łącz|[Oo]twórz)\sspotif(y|aja)
             | [Oo]d(twórz(aj)?|pal)(\s(moją\s)?([Uu]twór|[Pp]iosenk[eę]|pl(ay|ej)list[ęe]))?
             | [Zz]?reset(uj)?
             | [Pp]uść\sod\s(nowa|początku)
@@ -60,6 +61,9 @@ def p_command(p):
     if re.match(r"([Zz]a)?pauzuj|[Pp]auza|[Zz]atrzymaj]", p[1]):
         spotify_controller.spotify_pause()
 
+    elif re.match(r"([Ww]łącz|[Oo]twórz)\sspotif(y|aja)", p[1]):
+        spotify_controller.run_spotify()
+
     elif re.match(r"([Ww]łącz|[Oo](dtwórz|dpal))\s([Uu]twór|[Pp]iosenk[eę])", p[1]):
         try:
             spotify_controller.spotify_play_track(p[2][0], p[2][1])
@@ -98,7 +102,7 @@ def p_command(p):
         except Exception as e:
             print("Niepoprawna komenda.")
 
-    elif re.match(r"[Oo]dpauzuj|[Ww]znów|[Ww]łącz|[Oo]d(twórz(aj)?|pal)", p[1]):
+    elif re.match(r"[Oo]d\spauzuj|[Ww]znów|[Ww]łącz|[Oo]d(twórz(aj)?|pal)", p[1]):
         spotify_controller.spotify_unpause()
 
 

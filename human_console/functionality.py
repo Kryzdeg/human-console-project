@@ -3,6 +3,7 @@ from numpy import power, round
 from spotipy.oauth2 import SpotifyOAuth
 
 import os
+import subprocess
 import platform
 import webbrowser
 import playsound
@@ -230,6 +231,9 @@ class SpotifyController:
                     return pl['uri']
             return None
 
+    def run_spotify(self):
+        subprocess.Popen(["spotify"])
+
     def spotify_unpause(self):
         try:
             if self.current_device_id:
@@ -243,6 +247,9 @@ class SpotifyController:
         try:
             if self.current_device_id:
                 self.sp.pause_playback()
+                msg = "Utwór zatrzymany."
+                print(msg)
+                play_sound(msg, "track_paused_.mp3")
         except Exception as e:
             msg = "Twój utwór już jest zatrzymany, lub nie ma co zatrzymywać."
             print(msg)
