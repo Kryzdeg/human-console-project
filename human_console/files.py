@@ -3,6 +3,8 @@ from ply.yacc import yacc
 from .functionality import (
     create_txt_file,
     delete_txt_file,
+    create_directory,
+    delete_directory
 )
 
 import re
@@ -20,7 +22,7 @@ def FilesLexer():
         return t
 
     def t_FILE_TYPE(t):
-        r'[Pp]lik\s([Tt]ekstowy|[Dd]źwiękowy)'
+        r'[Pp]lik\s([Tt]ekstowy|[Dd]źwiękowy)| [Ff]older'
         return t
 
     def t_FILE_NAME(t):
@@ -48,6 +50,13 @@ def p_command(p):
                 file_name = "file.txt"
 
             create_txt_file(file_name)
+        elif re.match(r'[Ff]older', p[2]):
+            try:
+                directory_name = f"{p[3].replace(' ', '_')}"
+            except IndexError:
+                directory_name = "default_directory"
+
+            create_directory(directory_name)
         else:
             print("Zła komenda :(")
 
@@ -58,6 +67,16 @@ def p_command(p):
                 delete_txt_file(file_name)
             except IndexError:
                 print("Musisz podać jaki plik chcesz usunąć.")
+
+        elif re.match(r'[Ff]older', p[2]):
+            try:
+                directory_name = f"{p[3].replace(' ', '_')}"
+            except IndexError:
+                directory_name = "default_directory"
+
+            delete_directory(directory_name)
+        else:
+            print("Zła komenda :(")
 
 
 def p_error(p):

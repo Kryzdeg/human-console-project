@@ -74,6 +74,37 @@ def delete_txt_file(file_name):
     play_sound(msg, audio_file_name)
 
 
+def create_directory(directory_name):
+    if not os.path.isdir("directories"):
+        os.mkdir("directories")
+
+    if not os.path.isdir(f"directories/{directory_name}"):
+        os.mkdir(f"directories/{directory_name}")
+        msg = f"Stworzono folder {directory_name}."
+        print(msg)
+        audio_file_name = f"directory_created_{directory_name}.mp3"
+    else:
+        msg = f"Folder już istnieje."
+        print(msg)
+        audio_file_name = f"directory_already_exists.mp3"
+
+    play_sound(msg, audio_file_name)
+
+
+def delete_directory(directory_name):
+    if os.path.isdir(f"directories/{directory_name}"):
+        os.rmdir(f"directories/{directory_name}")
+        msg = f"Usunięto folder."
+        print(msg)
+        audio_file_name = f"directory_deleted.mp3"
+    else:
+        msg = f"Nie można usunąć folderu, ponieważ nie istnieje."
+        print(msg)
+        audio_file_name = f"directory_don't_exists.mp3"
+
+    play_sound(msg, audio_file_name)
+
+
 def get_webbrowser(browser=None):
     return webbrowser.get(browser)
 
