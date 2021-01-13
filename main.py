@@ -7,21 +7,24 @@ import sys
 
 
 def run_command(msg):
-    lexer_type = msg.split()[0].upper()
-    msg = msg.split(" ", 1)[1]
-    if lexer_type == "PLIKI":
-        file_lexer = FilesLexer()
-        file_parser.parse(msg, lexer=file_lexer)
-    elif lexer_type == "PRZEGLĄDARKA":
-        browser_lexer = BrowserLexer()
-        browser_parser.parse(msg, lexer=browser_lexer)
-    elif lexer_type == "KALKULATOR":
-        calc_lexer = CalcLexer()
-        calc_parser.parse(msg, lexer=calc_lexer)
-    elif lexer_type == "SPOTIFY":
-        spotify_lexer = SpotifyLexer()
-        spotify_parser.parse(msg, lexer=spotify_lexer)
-    else:
+    try:
+        lexer_type = msg.split()[0].upper()
+        msg = msg.split(" ", 1)[1]
+        if lexer_type == "PLIKI":
+            file_lexer = FilesLexer()
+            file_parser.parse(msg, lexer=file_lexer)
+        elif lexer_type == "PRZEGLĄDARKA":
+            browser_lexer = BrowserLexer()
+            browser_parser.parse(msg, lexer=browser_lexer)
+        elif lexer_type == "KALKULATOR":
+            calc_lexer = CalcLexer()
+            calc_parser.parse(msg, lexer=calc_lexer)
+        elif lexer_type == "SPOTIFY":
+            spotify_lexer = SpotifyLexer()
+            spotify_parser.parse(msg, lexer=spotify_lexer)
+        else:
+            print("Podaj proszę typ poleceń.")
+    except IndexError:
         print("Podaj proszę typ poleceń.")
 
 
