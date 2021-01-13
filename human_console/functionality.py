@@ -1,12 +1,13 @@
-import os
-import webbrowser
-import speech_recognition as sr
 from gtts import gTTS
-import playsound
 from numpy import power, round
-import subprocess
-import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+
+import os
+import platform
+import webbrowser
+import playsound
+import speech_recognition as sr
+import spotipy
 import environ
 
 
@@ -76,10 +77,6 @@ def delete_txt_file(file_name):
         audio_file_name = f"file_not_exist.mp3"
 
     play_sound(msg, audio_file_name)
-
-
-def run_program(program_name):
-    subprocess.call(["tutaj_ścieżka"])
 
 
 def get_webbrowser(browser=None):
@@ -174,30 +171,95 @@ def operate_nth_root(root, num):
     play_sound(msg, file_name)
 
 
-class SpotifyControler(object):
+class SpotifyController:
     def __init__(self):
         self.sp = None
-        self.device_id = None
+        self.current_device_id = None
+        self.current_device = None
 
-    def authorize(self):
-        scope = "user-modify-playback-state playlist-modify-public playlist-modify-private user-follow-modify user-read-currently-playing user-read-playback-state"
+    def setup(self):
+        scope = "user-read-playback-state user-modify-playback-state user-read-currently-playing"
 
-        auth_manager = SpotifyOAuth(client_id=env("SPOTIFY_API_CLIENT_ID"), client_secret=env("SPOTIFY_API_CLIENT_SECRET"),
-                                    redirect_uri=env("SPOTIFY_API_REDIRECT_URI"), scope=scope)
+        auth_manager = SpotifyOAuth(client_id=env("SPOTIFY_API_CLIENT_ID"),
+                                    client_secret=env("SPOTIFY_API_CLIENT_SECRET"),
+                                    redirect_uri=env("SPOTIFY_API_REDIRECT_URI"),
+                                    scope=scope)
+
         self.sp = spotipy.Spotify(auth_manager=auth_manager)
+        self._get_computer_device_id()
 
-    def get_device_id(self):
-        print(self.sp.devices())
+    def _get_computer_device_id(self):
+        for device in self.sp.devices()['devices']:
+            if device['name'] == platform.node():
+                self.current_device_id = device['id']
+                self.current_device = device
+                return
 
-    def get_me(self):
-        print(self.sp.me())
+        if not self.current_device_id:
+            self.current_device_id = None
+            self.current_device = None
+
+    def _get_smartphone_device_id(self):
+        for device in self.sp.devices()['devices']:
+            if device['type'] == "Smartphone":
+                self.current_device_id = device['id']
+                return
+
+        if not self.current_device_id:
+            self.current_device_id = None
+
+    def _get_me(self):
+        return self.sp.me()
+
+    def _get_artist_id(self, artist):
+        q_artist = self.sp.search(q=artist, type='artist')
+        try:
+            return q_artist['artists']['items'][0]['id']
+        except Exception as e:
+            return None
+
+    def _get_track_uri(self, artist_id, track_name):
+        q_track = self.sp.search(q=track_name, type="track")
+        for track in q_track['tracks']['items']:
+            if artist_id in [artist['id'] for artist in track['artists']]:
+                return track['uri']
+
+        return None
 
     def spotify_unpause(self):
-        pass
+        if self.current_device_id:
+            self.sp.start_playback()
 
     def spotify_pause(self):
-        pass
+        if self.current_device_id:
+            self.sp.pause_playback()
 
-    def spotify_play_song(self, artist, song):
-        pass
+    def spotify_reset_track(self):
+        self.sp.seek_track(position_ms=0)
 
+    def spotify_change_to_smartphone(self):
+        self._get_smartphone_device_id()
+        self.sp.transfer_playback(device_id=self.current_device_id)
+
+    def spotify_change_to_computer(self):
+        self._get_computer_device_id()
+        self.sp.transfer_playback(device_id=self.current_device_id)
+
+    def spotify_play_track(self, artist, track):
+        artist_id = self._get_artist_id(artist)
+
+        if artist_id:
+            track_uri = self._get_track_uri(artist_id, track)
+        else:
+            msg = f"Nie znaleziono artysty {artist}."
+            print(msg)
+            play_sound(msg, "artist_dont_exists.mp3")
+            return
+
+        if track_uri:
+            self.sp.start_playback(uris=[track_uri])
+        else:
+            msg = "Nie znaleziono poszukiwanego utworu."
+            print(msg)
+            play_sound(msg, "track_dont_exists.mp3")
+            return

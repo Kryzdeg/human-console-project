@@ -20,7 +20,6 @@ def run_command(msg):
         calc_lexer = CalcLexer()
         calc_parser.parse(msg, lexer=calc_lexer)
     elif lexer_type == "SPOTIFY":
-        print(msg)
         spotify_lexer = SpotifyLexer()
         spotify_parser.parse(msg, lexer=spotify_lexer)
     else:
@@ -35,9 +34,9 @@ while True:
     switch = input()
 
     if switch == "1":
-        msg = recording_command()
+        msg = recording_command().lower()
         print("Podana komenda: " + msg)
-        # run_command(msg)
+        run_command(msg)
 
     elif switch == "2":
         msg = input("Wpisz komendę: ").lower()
